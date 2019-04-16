@@ -26,9 +26,9 @@ public class tryProject extends JPanel implements ActionListener{
 		staffIdinput = new JTextField();																		// assignation of all text field and it`s initialization
 		staffIdinput.setText("");
 		inInput = new JTextField();
-		inInput.setText("");
+		inInput.setText("0");
 		outInput = new JTextField();
-		outInput.setText("");
+		outInput.setText("0");
 		totalout = new JTextField();
 		totalout.setEditable(false);
 
@@ -186,9 +186,9 @@ public class tryProject extends JPanel implements ActionListener{
 		if(e.getSource() == reset) 																				//if user click reset button, it will reset all input
 		{
 			staffIdinput.setText(" ");
-			inInput.setText(" ");
-			outInput.setText(" ");
-			g.clearSelection();
+			inInput.setText("0");
+			outInput.setText("0");
+
 			
 		}
 		if(e.getSource() == calculate)																			//if user click calculate, it will search for file with staff id name and calculate it total working hour for the week
