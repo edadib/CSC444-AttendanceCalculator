@@ -14,7 +14,7 @@ public class tryProject extends JPanel implements ActionListener{
 	private JRadioButton mon,tue,wed,thu,fri,sat,sun;
 	private ButtonGroup g = new ButtonGroup();
 
-/*method tryProject, all the declaration,initialized value, adding of components*/
+	/*method tryProject, all the declaration,initialized value, adding of components*/
 	public tryProject()
 	{
 		setLayout(new GridLayout(9,2)); 																		// to set the layout of the user interface
@@ -48,7 +48,6 @@ public class tryProject extends JPanel implements ActionListener{
 		g.add(fri);
 		g.add(sat);
 		g.add(sun);
-		mon.setSelected(true);                									 								//default radio button selection
 
 		enter = new JButton("Enter");																			// button assignation
 		enter.setToolTipText("To enter information");															//on hover, it will display a popup, to give information
@@ -108,50 +107,71 @@ public class tryProject extends JPanel implements ActionListener{
 				FileInputStream fi = new FileInputStream("staffId.dat");
 				ObjectInputStream oi = new ObjectInputStream(fi);
 
-				FileWriter fw1 = new FileWriter(sId+".txt",true);												//text file input output
+				FileWriter fw1 = new FileWriter(sId+" log.txt",true);												//text file input output
 				BufferedWriter bW1 = new BufferedWriter(fw1);
 				PrintWriter pW1 = new PrintWriter(bW1);
 
-				FileWriter fw2 = new FileWriter(sId+" remain.txt",true);
+				FileWriter fw2 = new FileWriter(sId+" hours.txt",true);
 				BufferedWriter bW2 = new BufferedWriter(fw2);
 				PrintWriter pW2 = new PrintWriter(bW2);
 
 				deduct = outTime-inTime;																		//working hours calculation
-				
-				totalout.setText("Done :D");																	//tell user upon successful file creation
 
 				if(mon.isSelected()==true)																		//determine which day user work
 				{
 					day = "Monday";
+					JOptionPane.showMessageDialog(null,"Done :D");												//popup that tells user upon successful file creation
+					pW1.println("\n"+day+"\t"+inTime+"\t"+outTime);												//writing to user record file, like a log file
+					pW2.println(""+deduct);																		//writing to user working hour file, for the use of total working hour calculation
 				}
 				if(tue.isSelected()==true)
 				{
 					day = "Tuesday";
+					JOptionPane.showMessageDialog(null,"Done :D");
+					pW1.println("\n"+day+"\t"+inTime+"\t"+outTime);
+					pW2.println(""+deduct);
 				}
 				if(wed.isSelected()==true)
 				{
 					day = "Wednesday";
+					JOptionPane.showMessageDialog(null,"Done :D");
+					pW1.println("\n"+day+"\t"+inTime+"\t"+outTime);
+					pW2.println(""+deduct);
 				}
 				if(thu.isSelected()==true)
 				{
 					day = "Thursday";
+					JOptionPane.showMessageDialog(null,"Done :D");
+					pW1.println("\n"+day+"\t"+inTime+"\t"+outTime);
+					pW2.println(""+deduct);
 				}
 				if(fri.isSelected()==true)
 				{
 					day = "Friday";
+					JOptionPane.showMessageDialog(null,"Done :D");
+					pW1.println("\n"+day+"\t"+inTime+"\t"+outTime);
+					pW2.println(""+deduct);
 				}
 				if(sat.isSelected()==true)
 				{
 					day = "Saturday";
+					JOptionPane.showMessageDialog(null,"Done :D");
+					pW1.println("\n"+day+"\t"+inTime+"\t"+outTime);
+					pW2.println(""+deduct);
 				}
 				if(sun.isSelected()==true)
 				{
 					day = "Sunday";
+					JOptionPane.showMessageDialog(null,"Done :D");
+					pW1.println("\n"+day+"\t"+inTime+"\t"+outTime);
+					pW2.println(""+deduct);
+				}
+				if(mon.isSelected()==false && tue.isSelected()==false && wed.isSelected()==false && thu.isSelected()==false && fri.isSelected()==false && sat.isSelected()==false && sun.isSelected()==false) //If none is selected
+				{
+					JOptionPane.showMessageDialog(new JFrame(),"Please choose your working day first","Warning",JOptionPane.WARNING_MESSAGE);		//Warning Popup that tells the user need to choose its working day first
 				}
 
-				pW1.println("\n"+day+"\t"+inTime+"\t"+outTime);													//writing to user record file, like a log file
-				pW2.println(""+deduct);																			//writing to user working hour file, for the use of total working hour calculation
-				
+
 				ou.close();																						//closing of all file
 				oi.close();
 				pW1.close();
@@ -188,6 +208,7 @@ public class tryProject extends JPanel implements ActionListener{
 			staffIdinput.setText(" ");
 			inInput.setText("0");
 			outInput.setText("0");
+			g.clearSelection();
 
 			
 		}
@@ -195,7 +216,7 @@ public class tryProject extends JPanel implements ActionListener{
 		{
 			try
 			{
-				s = new Scanner(new BufferedReader(new FileReader(sId+" remain.txt")));							//read from file
+				s = new Scanner(new BufferedReader(new FileReader(sId+" hours.txt")));							//read from file
 				while (s.hasNext()) 																			//while it has more value in it, it will loop
 				{
 					if (s.hasNextDouble()) {																	//if it is double, it will add with sum value and store its value in variable sum
@@ -236,11 +257,11 @@ public class tryProject extends JPanel implements ActionListener{
 			}
 			if(sum<40)								
 			{
-				totalout.setText("You have not complete your 40 hour for this week, you only did "+sum);		//to display if user does not meet the requirement
+				totalout.setText("You have not complete your 40 hour for this week, you only did "+sum+" hours");		//to display if user does not meet the requirement
 			}
 			else
 			{
-				totalout.setText("Congratulations. You have completed your 40 hour this week, you did "+sum);	//if user meet the requirement
+				totalout.setText("Congratulations. You have completed your 40 hour this week you did "+sum+" hours");	//if user meet the requirement
 			}
 		}
 	}
@@ -255,11 +276,11 @@ ________________________________________________________________________________
 [___________________________________________________________________________________]
 
 */
-	public static void main(String[] args) 
-	{
+public static void main(String[] args) 
+{
 		JFrame f = new JFrame("Attendance Calculator System");													//Title of the app
-		f.setPreferredSize(new Dimension (800,600));															//set the size of window
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);											
+		f.setExtendedState(Frame.MAXIMIZED_BOTH);															//set the size of window
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);									
 		f.getContentPane().add(new tryProject());																
 		f.pack();		
 		f.setVisible(true);
