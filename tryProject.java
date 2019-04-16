@@ -2,28 +2,28 @@ package trygui;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.text.DecimalFormat;
+								//import java.text.DecimalFormat;
 import java.util.*;
 
 import javax.swing.*;
 
 public class tryProject extends JPanel implements ActionListener{
-	private JLabel staffId, in, out, total, empty;
+	private JLabel staffId, in, out, total;																		//declaration of global variables
 	private JTextField staffIdinput, inInput, outInput ,totalout;
 	private JButton enter, reset, calculate;
 	private JRadioButton mon,tue,wed,thu,fri,sat,sun;
 	private ButtonGroup g = new ButtonGroup();
 
+/*method tryProject, all the declaration,initialized value, adding of components*/
 	public tryProject()
 	{
-		setLayout(new GridLayout(9,2));
-		empty = new JLabel("");
-		staffId = new JLabel("Enter Staff Id : ");
-		in = new JLabel("Enter punch in time (24h): ");
-		out = new JLabel("Enter punch out time (24h): ");
+		setLayout(new GridLayout(9,2)); 																		// to set the layout of the user interface
+		staffId = new JLabel("Enter Staff Id : ");																//declaration of all label
+		in = new JLabel("Enter punch in time (24h): ");			
+		out = new JLabel("Enter punch out time (24h): ");		
 		total = new JLabel("Comments : ");
 		
-		staffIdinput = new JTextField();
+		staffIdinput = new JTextField();																		// assignation of all text field and it`s initialization
 		staffIdinput.setText("");
 		inInput = new JTextField();
 		inInput.setText("");
@@ -32,7 +32,7 @@ public class tryProject extends JPanel implements ActionListener{
 		totalout = new JTextField();
 		totalout.setEditable(false);
 
-		mon = new JRadioButton("Monday");
+		mon = new JRadioButton("Monday");																		// radio button assignation
 		tue = new JRadioButton("Tuesday");
 		wed = new JRadioButton("Wednesday");
 		thu = new JRadioButton("Thursday");
@@ -41,22 +41,23 @@ public class tryProject extends JPanel implements ActionListener{
 		sun = new JRadioButton("Sunday");
 		
 
-		g.add(mon);
+		g.add(mon);																								// adding of button to its group
 		g.add(tue);
 		g.add(wed);
 		g.add(thu);
 		g.add(fri);
 		g.add(sat);
 		g.add(sun);
+		mon.setSelected(true);                									 								//default radio button selection
 
-		enter = new JButton("Enter");
-		enter.setToolTipText("To enter information");
+		enter = new JButton("Enter");																			// button assignation
+		enter.setToolTipText("To enter information");															//on hover, it will display a popup, to give information
 		reset = new JButton("Reset"); 
 		reset.setToolTipText("Reset to default value");
 		calculate = new JButton("Calculate");
 		calculate.setToolTipText("To calculate working hours");
 
-		add(staffId);
+		add(staffId);																							// add all the component to the user interface
 		add(staffIdinput);
 		add(in);
 		add(inInput);
@@ -75,7 +76,7 @@ public class tryProject extends JPanel implements ActionListener{
 		add(enter);
 		add(reset);
 
-		mon.addActionListener(this);
+		mon.addActionListener(this);																			//adding action listener to all that requires
 		tue.addActionListener(this);
 		wed.addActionListener(this);
 		thu.addActionListener(this);
@@ -91,24 +92,23 @@ public class tryProject extends JPanel implements ActionListener{
 
 	public void actionPerformed(ActionEvent e)
 	{
-		double inTime, outTime, deduct, remain, sum = 0.0;
+		double inTime, outTime, deduct, sum = 0.0;																//local variables declaration
 		String sId, day="";
-		DecimalFormat df = new DecimalFormat("0.00");
 		Scanner s = null;
 		sId = staffIdinput.getText();
-		inTime = Double.parseDouble(inInput.getText());
+		inTime = Double.parseDouble(inInput.getText());															//values input from text field are string, need to convert to double for arithmetic operation
 		outTime = Double.parseDouble(outInput.getText());
-		if(e.getSource() == enter)
+		if(e.getSource() == enter)																				//if enter is clicked
 		{
-			try
+			try 																								//try-catch clause for exception handling
 			{	
-				FileOutputStream fo = new FileOutputStream("staffId.dat");
+				FileOutputStream fo = new FileOutputStream("staffId.dat");										//binary file input output 
 				ObjectOutputStream ou = new ObjectOutputStream(fo);
 
 				FileInputStream fi = new FileInputStream("staffId.dat");
 				ObjectInputStream oi = new ObjectInputStream(fi);
 
-				FileWriter fw1 = new FileWriter(sId+".txt",true);
+				FileWriter fw1 = new FileWriter(sId+".txt",true);												//text file input output
 				BufferedWriter bW1 = new BufferedWriter(fw1);
 				PrintWriter pW1 = new PrintWriter(bW1);
 
@@ -116,13 +116,11 @@ public class tryProject extends JPanel implements ActionListener{
 				BufferedWriter bW2 = new BufferedWriter(fw2);
 				PrintWriter pW2 = new PrintWriter(bW2);
 
-
+				deduct = outTime-inTime;																		//working hours calculation
 				
-				deduct = outTime-inTime;
-				
-				totalout.setText("Done :D");
+				totalout.setText("Done :D");																	//tell user upon successful file creation
 
-				if(mon.isSelected()==true)
+				if(mon.isSelected()==true)																		//determine which day user work
 				{
 					day = "Monday";
 				}
@@ -151,10 +149,11 @@ public class tryProject extends JPanel implements ActionListener{
 					day = "Sunday";
 				}
 
-				pW1.println("\n"+day+"\t"+inTime+"\t"+outTime);
-				pW2.println(""+deduct);
+				pW1.println("\n"+day+"\t"+inTime+"\t"+outTime);													//writing to user record file, like a log file
+				pW2.println(""+deduct);																			//writing to user working hour file, for the use of total working hour calculation
 				
-				ou.close();
+				ou.close();																						//closing of all file
+				oi.close();
 				pW1.close();
 				pW2.close();
 			}
@@ -163,11 +162,6 @@ public class tryProject extends JPanel implements ActionListener{
 				JOptionPane.showMessageDialog(null,fn.getMessage());
 				fn.printStackTrace();
 			}
-			catch(IOException io)
-			{
-				JOptionPane.showMessageDialog(null,io.getMessage());
-				io.printStackTrace();
-			}
 			catch(NumberFormatException ne)
 			{
 				JOptionPane.showMessageDialog(null,ne.getMessage());
@@ -178,13 +172,18 @@ public class tryProject extends JPanel implements ActionListener{
 				JOptionPane.showMessageDialog(null,np.getMessage());
 				np.printStackTrace();
 			}
+			catch(IOException io)
+			{
+				JOptionPane.showMessageDialog(null,io.getMessage());
+				io.printStackTrace();
+			}
 			catch(Exception de)
 			{  
 				JOptionPane.showMessageDialog(null,de.getMessage());
 				de.printStackTrace();
 			}
 		}
-		if(e.getSource()== reset) 
+		if(e.getSource() == reset) 																				//if user click reset button, it will reset all input
 		{
 			staffIdinput.setText(" ");
 			inInput.setText(" ");
@@ -192,29 +191,25 @@ public class tryProject extends JPanel implements ActionListener{
 			g.clearSelection();
 			
 		}
-		if(e.getSource() == calculate)
+		if(e.getSource() == calculate)																			//if user click calculate, it will search for file with staff id name and calculate it total working hour for the week
 		{
-			try{
-				s = new Scanner(new BufferedReader(new FileReader(sId+" remain.txt")));
-				while (s.hasNext()) 
+			try
+			{
+				s = new Scanner(new BufferedReader(new FileReader(sId+" remain.txt")));							//read from file
+				while (s.hasNext()) 																			//while it has more value in it, it will loop
 				{
-					if (s.hasNextDouble()) {
+					if (s.hasNextDouble()) {																	//if it is double, it will add with sum value and store its value in variable sum
 						sum += s.nextDouble();
 					}
 					else {
-						s.next();
+						s.next();																				//if not double it will skip
 					}
 				}
 			}
-			catch(FileNotFoundException fn)
+			catch(FileNotFoundException fn)																		//exception handler
 			{
 				JOptionPane.showMessageDialog(null,fn.getMessage());
 				fn.printStackTrace();
-			}
-			catch(IOException io)
-			{
-				JOptionPane.showMessageDialog(null,io.getMessage());
-				io.printStackTrace();
 			}
 			catch(NumberFormatException ne)
 			{
@@ -226,32 +221,47 @@ public class tryProject extends JPanel implements ActionListener{
 				JOptionPane.showMessageDialog(null,np.getMessage());
 				np.printStackTrace();
 			}
+			catch(IOException io)
+			{
+				JOptionPane.showMessageDialog(null,io.getMessage());
+				io.printStackTrace();
+			}
 			catch(Exception de)
 			{  
 				JOptionPane.showMessageDialog(null,de.getMessage());
 				de.printStackTrace();
 			}
 			finally{
-				s.close();
+				s.close();																						//close file
 			}
-			if(sum<40)
+			if(sum<40)								
 			{
-				totalout.setText("You have not complete your 40 hour for this week, you only did "+sum);
+				totalout.setText("You have not complete your 40 hour for this week, you only did "+sum);		//to display if user does not meet the requirement
 			}
 			else
 			{
-				totalout.setText("Congratulations. You have completed your 40 hour this week, you did "+sum);
+				totalout.setText("Congratulations. You have completed your 40 hour this week, you did "+sum);	//if user meet the requirement
 			}
 		}
 	}
+/*
+_____________________________________________________________________________________
+|		Simple README																|
+|																					|
+|	1. First compile and run this source code. 										|
+|	2. As the output has emerged, first key-in the staff id, the times, and day.	|
+|	3. Click on enter to save the user input into file.								|
+|	4. Click calculate to calculate either user has enough working time or not.		|
+[___________________________________________________________________________________]
 
+*/
 	public static void main(String[] args) 
 	{
-		JFrame f = new JFrame("Attendance Calculator System");
-		f.setPreferredSize(new Dimension (800,600));
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.getContentPane().add(new tryProject());
-		f.pack();
+		JFrame f = new JFrame("Attendance Calculator System");													//Title of the app
+		f.setPreferredSize(new Dimension (800,600));															//set the size of window
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);											
+		f.getContentPane().add(new tryProject());																
+		f.pack();		
 		f.setVisible(true);
 
 	}
