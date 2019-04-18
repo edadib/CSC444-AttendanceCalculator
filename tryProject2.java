@@ -1,8 +1,12 @@
+package trygui;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.Color.*;
 import java.io.*;
+								//import java.text.DecimalFormat;
 import java.util.*;
+
+import javax.swing.*;
 
 public class tryProject2 extends JPanel implements ActionListener{
 	private JLabel staffId, in, out, total, empty1, empty2, empty3, empty4, empty5, empty6;						//declaration of global variables
@@ -30,7 +34,7 @@ public class tryProject2 extends JPanel implements ActionListener{
 		empty6 = new JLabel(" ");
 		
 		staffIdinput = new JTextField();																		// assignation of all text field and it`s initialization
-		staffIdinput.setText("");
+		staffIdinput.setText(" ");
 		inInput = new JTextField();
 		inInput.setText("0");
 		outInput = new JTextField();
@@ -133,7 +137,7 @@ public class tryProject2 extends JPanel implements ActionListener{
 				BufferedWriter bW2 = new BufferedWriter(fw2);
 				PrintWriter pW2 = new PrintWriter(bW2);
 
-				if(staffIdinput.getText().equals(""))															
+				if(staffIdinput.getText().equals(" "))															
 				{
 					JOptionPane.showMessageDialog(new JFrame(),"Please enter your staff id first !","Warning",JOptionPane.WARNING_MESSAGE);				//if the staff id text field is empty
 				}
@@ -145,7 +149,7 @@ public class tryProject2 extends JPanel implements ActionListener{
 					}
 					else
 					{
-						deduct = outTime-inTime;
+						deduct = outTime-inTime;																//calculation
 						if(mon.isSelected()==true)																//determine which day user work
 						{
 							day = "Mon";																						
@@ -218,7 +222,7 @@ public class tryProject2 extends JPanel implements ActionListener{
 		}
 		if(e.getSource() == reset) 																					//if user click reset button, it will reset all input
 		{
-			staffIdinput.setText("");
+			staffIdinput.setText(" ");
 			inInput.setText("0");
 			outInput.setText("0");
 			g.clearSelection();
@@ -227,49 +231,56 @@ public class tryProject2 extends JPanel implements ActionListener{
 		}
 		if(e.getSource() == calculate)																				//if user click calculate, it will search for file with staff id name and calculate it total working hour for the week
 		{
-			try
+			if(staffIdinput.getText().equals(" "))															
 			{
-				s = new Scanner(new BufferedReader(new FileReader(sId+" hours.txt")));								//read from file
-				while (s.hasNext()) 																				//while it has more value in it, it will loop
-				{
-					if (s.hasNextDouble()) {																		//if it is double, it will add with sum value and store its value in variable sum
-						sum += s.nextDouble();
-					}
-					else {
-						s.next();																					//if not double it will skip
-					}
-				}
-			}
-			catch(FileNotFoundException fn)																			//exception handler
-			{
-				JOptionPane.showMessageDialog(null,fn.getMessage());
-				fn.printStackTrace();
-			}
-			catch(NumberFormatException ne)
-			{
-				JOptionPane.showMessageDialog(null,ne.getMessage());
-				ne.printStackTrace();
-			}
-			catch(NullPointerException np)
-			{
-				JOptionPane.showMessageDialog(null,np.getMessage());
-				np.printStackTrace();
-			}
-			catch(Exception de)
-			{  
-				JOptionPane.showMessageDialog(null,de.getMessage());
-				de.printStackTrace();
-			}
-			finally{
-				s.close();																							//close file
-			}
-			if(sum<40)								
-			{
-				totalout.setText("You have not complete your 40 hour for this week, you only did "+sum+" hours");		//to display if user does not meet the requirement
+				JOptionPane.showMessageDialog(new JFrame(),"Please enter your staff id first !","Warning",JOptionPane.WARNING_MESSAGE);				//if the staff id text field is empty
 			}
 			else
 			{
-				totalout.setText("Congratulations. You have completed your 40 hour this week you did "+sum+" hours");	//if user meet the requirement
+				try
+				{
+					s = new Scanner(new BufferedReader(new FileReader(sId+" hours.txt")));								//read from file
+					while (s.hasNext()) 																				//while it has more value in it, it will loop
+					{
+						if (s.hasNextDouble()) {																		//if it is double, it will add with sum value and store its value in variable sum
+							sum += s.nextDouble();
+						}
+						else {
+							s.next();																					//if not double it will skip
+						}
+					}
+				}
+				catch(FileNotFoundException fn)																			//exception handler
+				{
+					JOptionPane.showMessageDialog(null,fn.getMessage());
+					fn.printStackTrace();
+				}
+				catch(NumberFormatException ne)
+				{
+					JOptionPane.showMessageDialog(null,ne.getMessage());
+					ne.printStackTrace();
+				}
+				catch(NullPointerException np)
+				{
+					JOptionPane.showMessageDialog(null,np.getMessage());
+					np.printStackTrace();
+				}
+				catch(Exception de)
+				{  
+					JOptionPane.showMessageDialog(null,de.getMessage());
+					de.printStackTrace();
+				}
+				finally{
+					s.close();																							//close file
+				}
+				if(sum<40)								
+				{
+					totalout.setText("You have not complete your 40 hour for this week, you only did "+sum+" hours");		//to display if user does not meet the requirement
+				}
+				else
+				{
+					totalout.setText("Congratulations. You have completed your 40 hour this week you did "+sum+" hours");	//if user meet the requirement
+				}
 			}
 		}
 	}
