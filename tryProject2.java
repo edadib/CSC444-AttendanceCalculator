@@ -1,15 +1,11 @@
-package trygui;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.Color.*;
 import java.io.*;
-								//import java.text.DecimalFormat;
 import java.util.*;
 
-import javax.swing.*;
-
 public class tryProject2 extends JPanel implements ActionListener{
-	private JLabel staffId, in, out, total, empty1, empty2, empty3, empty4, empty5, empty6;																		//declaration of global variables
+	private JLabel staffId, in, out, total, empty1, empty2, empty3, empty4, empty5, empty6;						//declaration of global variables
 	private JTextField staffIdinput, inInput, outInput ,totalout;
 	private JButton enter, reset, calculate;
 	private JRadioButton mon,tue,wed,thu,fri,sat,sun;
@@ -22,7 +18,7 @@ public class tryProject2 extends JPanel implements ActionListener{
 	public tryProject2()
 	{
 
-		staffId = new JLabel("Enter Staff Id : ");																//declaration of all label
+		staffId = new JLabel("Enter Staff Id : ");																//assignation of all label
 		in = new JLabel("Enter punch in time (24h): ");			
 		out = new JLabel("Enter punch out time (24h): ");		
 		total = new JLabel("Comments : ");
@@ -102,8 +98,8 @@ public class tryProject2 extends JPanel implements ActionListener{
 		reset.addActionListener(this);
 		calculate.addActionListener(this);
 		
-		f.setLayout(new GridLayout(8,3));
-		f.setExtendedState(Frame.MAXIMIZED_BOTH);
+		f.setLayout(new GridLayout(8,3));																		//set the layout to be 8 row by 3 collumn
+		f.setExtendedState(Frame.MAXIMIZED_BOTH);																//make the user interface appears as full screen
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
 
@@ -120,7 +116,7 @@ public class tryProject2 extends JPanel implements ActionListener{
 		{
 			try 																								//try-catch clause for exception handling
 			{	
-				inTime = Double.parseDouble(inInput.getText());															//values input from text field are string, need to convert to double for arithmetic operation
+				inTime = Double.parseDouble(inInput.getText());													//values input from text field are string, need to convert to double for arithmetic operation
 				outTime = Double.parseDouble(outInput.getText());
             
 				FileOutputStream fo = new FileOutputStream("staffId.dat");										//binary file input output 
@@ -129,7 +125,7 @@ public class tryProject2 extends JPanel implements ActionListener{
 				FileInputStream fi = new FileInputStream("staffId.dat");
 				ObjectInputStream oi = new ObjectInputStream(fi);
 
-				FileWriter fw1 = new FileWriter(sId+" log.txt",true);												//text file input output
+				FileWriter fw1 = new FileWriter(sId+" log.txt",true);											//text file input output
 				BufferedWriter bW1 = new BufferedWriter(fw1);
 				PrintWriter pW1 = new PrintWriter(bW1);
 
@@ -137,12 +133,12 @@ public class tryProject2 extends JPanel implements ActionListener{
 				BufferedWriter bW2 = new BufferedWriter(fw2);
 				PrintWriter pW2 = new PrintWriter(bW2);
 
-				if(staffIdinput.getText().equals(""))
+				if(staffIdinput.getText().equals(""))															
 				{
-					JOptionPane.showMessageDialog(new JFrame(),"Please enter your staff id first !","Warning",JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(new JFrame(),"Please enter your staff id first !","Warning",JOptionPane.WARNING_MESSAGE);				//if the staff id text field is empty
 				}
 				else
-				{																		//working hours calculation
+				{
 					if(mon.isSelected()==false && tue.isSelected()==false && wed.isSelected()==false && thu.isSelected()==false && fri.isSelected()==false && sat.isSelected()==false && sun.isSelected()==false) //If none is selected
 					{
 						JOptionPane.showMessageDialog(new JFrame(),"Please choose your working day first","Warning",JOptionPane.WARNING_MESSAGE);		//Warning Popup that tells the user need to choose its working day first
@@ -150,66 +146,53 @@ public class tryProject2 extends JPanel implements ActionListener{
 					else
 					{
 						deduct = outTime-inTime;
-						if(mon.isSelected()==true)																		//determine which day user work
+						if(mon.isSelected()==true)																//determine which day user work
 						{
-							day = "Monday";
-							JOptionPane.showMessageDialog(null,"Done :D");												//popup that tells user upon successful file creation
-																									//writing to user working hour file, for the use of total working hour calculation
+							day = "Mon";																						
 						}
 						if(tue.isSelected()==true)
 						{
-							day = "Tuesday";
-							JOptionPane.showMessageDialog(null,"Done :D");
-							
+							day = "Tue";
 						}
 						if(wed.isSelected()==true)
 						{
-							day = "Wednesday";
-							JOptionPane.showMessageDialog(null,"Done :D");
-							
+							day = "Wed";
 						}
 						if(thu.isSelected()==true)
 						{
-							day = "Thursday";
-							JOptionPane.showMessageDialog(null,"Done :D");
-							
+							day = "Thu";
 						}
 						if(fri.isSelected()==true)
 						{
-							day = "Friday";
-							JOptionPane.showMessageDialog(null,"Done :D");
-							
+							day = "Fri";
 						}
 						if(sat.isSelected()==true)
 						{
-							day = "Saturday";
-							JOptionPane.showMessageDialog(null,"Done :D");
-							
+							day = "Sat";
 						}
 						if(sun.isSelected()==true)
 						{
-							day = "Sunday";
-							JOptionPane.showMessageDialog(null,"Done :D");
-							
+							day = "Sun";			
 						}
 						pW1.println("\n"+day+"\t"+inTime+"\t"+outTime);												//writing to user record file, like a log file
-						pW2.println(""+deduct);
+						pW2.println(""+deduct);																		//writing to user working hour file, for the use of total working hour calculation
+						JOptionPane.showMessageDialog(null,"Done :D");												//popup that tells user upon successful file creation
 					}
 				}
 
-				ou.close();																						//closing of all file
+				ou.close();																							//closing of all file
 				oi.close();
 				pW1.close();
 				pW2.close();
 			}
-			catch(FileNotFoundException fn)
+			catch(FileNotFoundException fn)																			//if there is no such file as the staff id exist
 			{
 				JOptionPane.showMessageDialog(null,fn.getMessage());
 				fn.printStackTrace();
 			}
 			catch(NumberFormatException ne)
 			{
-            JOptionPane.showMessageDialog(new JFrame(),"Enter Numbers Only !","Warning",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(new JFrame(),"Enter Numbers Only !","Warning",JOptionPane.WARNING_MESSAGE);	//if user enter other than double, it will display error message
 				ne.printStackTrace();
 			}
 			catch(NullPointerException np)
@@ -233,7 +216,7 @@ public class tryProject2 extends JPanel implements ActionListener{
 				de.printStackTrace();
 			}
 		}
-		if(e.getSource() == reset) 																				//if user click reset button, it will reset all input
+		if(e.getSource() == reset) 																					//if user click reset button, it will reset all input
 		{
 			staffIdinput.setText("");
 			inInput.setText("0");
@@ -242,22 +225,22 @@ public class tryProject2 extends JPanel implements ActionListener{
 
 			
 		}
-		if(e.getSource() == calculate)																			//if user click calculate, it will search for file with staff id name and calculate it total working hour for the week
+		if(e.getSource() == calculate)																				//if user click calculate, it will search for file with staff id name and calculate it total working hour for the week
 		{
 			try
 			{
-				s = new Scanner(new BufferedReader(new FileReader(sId+" hours.txt")));							//read from file
-				while (s.hasNext()) 																			//while it has more value in it, it will loop
+				s = new Scanner(new BufferedReader(new FileReader(sId+" hours.txt")));								//read from file
+				while (s.hasNext()) 																				//while it has more value in it, it will loop
 				{
-					if (s.hasNextDouble()) {																	//if it is double, it will add with sum value and store its value in variable sum
+					if (s.hasNextDouble()) {																		//if it is double, it will add with sum value and store its value in variable sum
 						sum += s.nextDouble();
 					}
 					else {
-						s.next();																				//if not double it will skip
+						s.next();																					//if not double it will skip
 					}
 				}
 			}
-			catch(FileNotFoundException fn)																		//exception handler
+			catch(FileNotFoundException fn)																			//exception handler
 			{
 				JOptionPane.showMessageDialog(null,fn.getMessage());
 				fn.printStackTrace();
@@ -278,7 +261,7 @@ public class tryProject2 extends JPanel implements ActionListener{
 				de.printStackTrace();
 			}
 			finally{
-				s.close();																						//close file
+				s.close();																							//close file
 			}
 			if(sum<40)								
 			{
@@ -303,6 +286,6 @@ ________________________________________________________________________________
 */
 	public static void main(String[] args) 
 	{ 																		
-		new tryProject2();														//set the size of window
+		new tryProject2();														//calling method
 	}
 }
