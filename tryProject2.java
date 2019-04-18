@@ -1,6 +1,7 @@
 package trygui;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.Color.*;
 import java.io.*;
 								//import java.text.DecimalFormat;
 import java.util.*;
@@ -101,10 +102,10 @@ public class tryProject2 extends JPanel implements ActionListener{
 		reset.addActionListener(this);
 		calculate.addActionListener(this);
 		
-      f.setLayout(new GridLayout(8,3));
-      f.setExtendedState(Frame.MAXIMIZED_BOTH);
-      f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      f.setVisible(true);
+		f.setLayout(new GridLayout(8,3));
+		f.setExtendedState(Frame.MAXIMIZED_BOTH);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setVisible(true);
 
 	}
 
@@ -114,12 +115,14 @@ public class tryProject2 extends JPanel implements ActionListener{
 		String sId, day="";
 		Scanner s = null;
 		sId = staffIdinput.getText();
-		inTime = Double.parseDouble(inInput.getText());															//values input from text field are string, need to convert to double for arithmetic operation
-		outTime = Double.parseDouble(outInput.getText());
+		
 		if(e.getSource() == enter)																				//if enter is clicked
 		{
 			try 																								//try-catch clause for exception handling
 			{	
+				inTime = Double.parseDouble(inInput.getText());															//values input from text field are string, need to convert to double for arithmetic operation
+				outTime = Double.parseDouble(outInput.getText());
+            
 				FileOutputStream fo = new FileOutputStream("staffId.dat");										//binary file input output 
 				ObjectOutputStream ou = new ObjectOutputStream(fo);
 
@@ -134,62 +137,65 @@ public class tryProject2 extends JPanel implements ActionListener{
 				BufferedWriter bW2 = new BufferedWriter(fw2);
 				PrintWriter pW2 = new PrintWriter(bW2);
 
-				deduct = outTime-inTime;																		//working hours calculation
-
-				if(mon.isSelected()==true)																		//determine which day user work
+				if(staffIdinput.getText().equals(""))
 				{
-					day = "Monday";
-					JOptionPane.showMessageDialog(null,"Done :D");												//popup that tells user upon successful file creation
-					pW1.println("\n"+day+"\t"+inTime+"\t"+outTime);												//writing to user record file, like a log file
-					pW2.println(""+deduct);																		//writing to user working hour file, for the use of total working hour calculation
+					JOptionPane.showMessageDialog(new JFrame(),"Please enter your staff id first !","Warning",JOptionPane.WARNING_MESSAGE);
 				}
-				if(tue.isSelected()==true)
-				{
-					day = "Tuesday";
-					JOptionPane.showMessageDialog(null,"Done :D");
-					pW1.println("\n"+day+"\t"+inTime+"\t"+outTime);
-					pW2.println(""+deduct);
+				else
+				{																		//working hours calculation
+					if(mon.isSelected()==false && tue.isSelected()==false && wed.isSelected()==false && thu.isSelected()==false && fri.isSelected()==false && sat.isSelected()==false && sun.isSelected()==false) //If none is selected
+					{
+						JOptionPane.showMessageDialog(new JFrame(),"Please choose your working day first","Warning",JOptionPane.WARNING_MESSAGE);		//Warning Popup that tells the user need to choose its working day first
+					}
+					else
+					{
+						deduct = outTime-inTime;
+						if(mon.isSelected()==true)																		//determine which day user work
+						{
+							day = "Monday";
+							JOptionPane.showMessageDialog(null,"Done :D");												//popup that tells user upon successful file creation
+																									//writing to user working hour file, for the use of total working hour calculation
+						}
+						if(tue.isSelected()==true)
+						{
+							day = "Tuesday";
+							JOptionPane.showMessageDialog(null,"Done :D");
+							
+						}
+						if(wed.isSelected()==true)
+						{
+							day = "Wednesday";
+							JOptionPane.showMessageDialog(null,"Done :D");
+							
+						}
+						if(thu.isSelected()==true)
+						{
+							day = "Thursday";
+							JOptionPane.showMessageDialog(null,"Done :D");
+							
+						}
+						if(fri.isSelected()==true)
+						{
+							day = "Friday";
+							JOptionPane.showMessageDialog(null,"Done :D");
+							
+						}
+						if(sat.isSelected()==true)
+						{
+							day = "Saturday";
+							JOptionPane.showMessageDialog(null,"Done :D");
+							
+						}
+						if(sun.isSelected()==true)
+						{
+							day = "Sunday";
+							JOptionPane.showMessageDialog(null,"Done :D");
+							
+						}
+						pW1.println("\n"+day+"\t"+inTime+"\t"+outTime);												//writing to user record file, like a log file
+						pW2.println(""+deduct);
+					}
 				}
-				if(wed.isSelected()==true)
-				{
-					day = "Wednesday";
-					JOptionPane.showMessageDialog(null,"Done :D");
-					pW1.println("\n"+day+"\t"+inTime+"\t"+outTime);
-					pW2.println(""+deduct);
-				}
-				if(thu.isSelected()==true)
-				{
-					day = "Thursday";
-					JOptionPane.showMessageDialog(null,"Done :D");
-					pW1.println("\n"+day+"\t"+inTime+"\t"+outTime);
-					pW2.println(""+deduct);
-				}
-				if(fri.isSelected()==true)
-				{
-					day = "Friday";
-					JOptionPane.showMessageDialog(null,"Done :D");
-					pW1.println("\n"+day+"\t"+inTime+"\t"+outTime);
-					pW2.println(""+deduct);
-				}
-				if(sat.isSelected()==true)
-				{
-					day = "Saturday";
-					JOptionPane.showMessageDialog(null,"Done :D");
-					pW1.println("\n"+day+"\t"+inTime+"\t"+outTime);
-					pW2.println(""+deduct);
-				}
-				if(sun.isSelected()==true)
-				{
-					day = "Sunday";
-					JOptionPane.showMessageDialog(null,"Done :D");
-					pW1.println("\n"+day+"\t"+inTime+"\t"+outTime);
-					pW2.println(""+deduct);
-				}
-				if(mon.isSelected()==false && tue.isSelected()==false && wed.isSelected()==false && thu.isSelected()==false && fri.isSelected()==false && sat.isSelected()==false && sun.isSelected()==false) //If none is selected
-				{
-					JOptionPane.showMessageDialog(new JFrame(),"Please choose your working day first","Warning",JOptionPane.WARNING_MESSAGE);		//Warning Popup that tells the user need to choose its working day first
-				}
-
 
 				ou.close();																						//closing of all file
 				oi.close();
@@ -203,13 +209,18 @@ public class tryProject2 extends JPanel implements ActionListener{
 			}
 			catch(NumberFormatException ne)
 			{
-				JOptionPane.showMessageDialog(null,ne.getMessage());
+            JOptionPane.showMessageDialog(new JFrame(),"Enter Numbers Only !","Warning",JOptionPane.WARNING_MESSAGE);
 				ne.printStackTrace();
 			}
 			catch(NullPointerException np)
 			{
 				JOptionPane.showMessageDialog(null,np.getMessage());
 				np.printStackTrace();
+			}
+			catch(InputMismatchException im)
+			{
+				JOptionPane.showMessageDialog(null,im.getMessage());
+				im.printStackTrace();
 			}
 			catch(IOException io)
 			{
@@ -224,7 +235,7 @@ public class tryProject2 extends JPanel implements ActionListener{
 		}
 		if(e.getSource() == reset) 																				//if user click reset button, it will reset all input
 		{
-			staffIdinput.setText(" ");
+			staffIdinput.setText("");
 			inInput.setText("0");
 			outInput.setText("0");
 			g.clearSelection();
@@ -292,6 +303,6 @@ ________________________________________________________________________________
 */
 	public static void main(String[] args) 
 	{ 																		
-			new tryProject2();														//set the size of window
+		new tryProject2();														//set the size of window
 	}
 }
